@@ -1,13 +1,13 @@
 {
   "name": "js-trace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Dump the stack of a function.",
   "author": "Bruno Dias <dias.h.bruno@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/diasbruno/jstrace/issues"
+    "url": "https://github.com/diasbruno/js-trace/issues"
   },
-  "homepage": "https://github.com/diasbruno/jstrace#readme.md",
+  "homepage": "https://github.com/diasbruno/js-trace#readme.md",
   "main": "src/jstrace.js",
   "scripts": {
     "build:dist": "webpack -p",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diasbruno/jstrace.git"
+    "url": "git+https://github.com/diasbruno/js-trace.git"
   },
   "keywords": [
     "trace",
