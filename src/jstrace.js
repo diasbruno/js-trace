@@ -1,17 +1,43 @@
-var jsonToString = JSON.stringify;
+function dump(a) {
+  if (typeof a === "function") {
+    return a.toString();
+  }
+  return a;
+}
 
 function dumpStack(store) {
-  var i = 0;
-
-  if (store.fn.name == "") {
+  if (store.message !== "") {
+    console.log(store.message);
+  }
+  if (store.fn.name === "") {
     console.log("Calling function:", store.fn.toString());
   } else {
     console.log("Calling function:", store.fn.name);
   }
   console.log("Input(s):");
-  store.input.map((a, k) => console.log(k + ":", jsonToString(a)));
+  store.input.map((a, k) => {
+    console.log(`${k}:`);
+    console.log(dump(a));
+  });
   console.log("Output:");
   console.log(store.output);
+  return store.output;
+}
+
+function dumpError(store) {
+  if (store.message !== "") {
+    console.log(store.message);
+  }
+  if (store.fn.name === "") {
+    console.log("Calling function:", store.fn.toString());
+  } else {
+    console.log("Calling function:", store.fn.name);
+  }
+  console.log("Input(s):");
+  store.input.map((a, k) => console.log(`${k}:`, dump(a)));
+  console.log("Error:");
+  console.log(store.e);
+  console.log(store.stack);
   return store.output;
 }
 
@@ -23,7 +49,7 @@ function dumpStack(store) {
  * @param {Function} f A continuation function.
  * @return {Function}
  */
-export default function trace(f, message, context) {
+function trace(f, message, context) {
   var ctx = context ? context : null;
   return function(x) {
     var store = {};
@@ -33,15 +59,19 @@ export default function trace(f, message, context) {
     store.input = args;
     store.context = context;
     try {
+      console.log(ctx);
       var res = f.apply(ctx, args);
       store.output = res;
       return dumpStack(store);
     } catch(e) {
       store.error = e;
       store.stack = e.stack;
-      console.log("[Exception]" + message, jsonToString(store));
+      console.log(`[Exception]`);
+      dumpError(store);
     }
     console.log("Bailing out on trace. Return argument: ", x);
     return x;
   };
 }
+
+export default trace;
